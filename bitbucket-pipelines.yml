@@ -23,14 +23,14 @@ pipelines:
             - zip -r artifact/archive.zip *
             - pipe: atlassian/aws-s3-deploy:0.5.0
               variables:
-                 AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
-                 AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
-                 AWS_DEFAULT_REGION: ${AWS_DEFAULT_REGION}
-                 COMMAND: 'upload-only'
-                 S3_BUCKET: $S3_BUCKET
-                 LOCAL_PATH: 'artifact'
-                 ACL: 'private'
-                 APPLICATION_NAME: ${APPLICATION_NAME}
+                AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+                AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+                AWS_DEFAULT_REGION: ${AWS_DEFAULT_REGION}
+                COMMAND: 'upload-only'
+                S3_BUCKET: $S3_BUCKET
+                LOCAL_PATH: 'artifact'
+                ACL: 'private'
+                APPLICATION_NAME: ${APPLICATION_NAME}
       - step:
           name: Deploy to CodeDeploy
           image: atlassian/default-image:2
@@ -42,7 +42,7 @@ pipelines:
             - aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
             - aws configure set default.region $AWS_DEFAULT_REGION
             - |
-             aws deploy create-deployment \
+            aws deploy create-deployment \
               --application-name $APPLICATION_NAME \
               --deployment-config-name CodeDeployDefault.OneAtATime \
               --deployment-group-name $DEPLOYMENT_GROUP \
