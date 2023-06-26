@@ -1,0 +1,39 @@
+spring.config.import: 
+  - aws-secretsmanager:rds/dev/app/app-dev-db-user
+  - aws-secretsmanager:app/dev/jwt
+  - aws-secretsmanager:dev/SES/SMTP/Credentials
+spring:
+  datasource:
+    driver-class-name: com.amazonaws.secretsmanager.sql.AWSSecretsManagerMySQLDriver
+    url: jdbc-secretsmanager:mysql://db-dev-altitude-tech-net.csderzmjxeem.eu-central-1.rds.amazonaws.com:3306/dev-propass
+    username: rds/dev/app/app-dev-db-user
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    hibernate:
+      ddl-auto: update
+  mail:
+    host: email-smtp.eu-central-1.amazonaws.com
+    username: ${ses-smtp-username}
+    password: ${ses-smtp-password}
+    properties.mail.transport.protocol: smtp
+    properties.mail.smtp.port: 25
+    properties.mail.smtp.auth: true
+    properties.mail.smtp.starttls.enable: true
+    properties.mail.smtp.starttls.required: true
+propass:
+  vouchers.email: noreply@altitude-tech.net
+  security.jwt:
+    secret: ${jwt-secret}
+    expirationms: ${jwt-expirationms}
+  service.user:
+    host: http://localhost
+    port: 8080
+  service.booking.flight.sabre:
+    token: ${SABRE_TOKEN}
+server.error.include-message: always
+
+# Swagger properties:
+springdoc:
+  api-docs.enabled: true
+  swagger-ui.enabled: true
+  packagesToScan: net.altitudetech.propass.api.gateway.controller

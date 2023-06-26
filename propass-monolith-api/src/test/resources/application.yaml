@@ -1,0 +1,13 @@
+hibernate.dialect: org.hibernate.dialect.MySQLDialect
+spring:
+  datasource:
+    url: jdbc:tc:mysql:8.0:///test_database
+    username: user
+    password: password
+  jpa:
+    hibernate:
+      ddl-auto: create
+propass:
+  security.jwt:
+    secret: c2VjcmV0c2VjcmV0c2VjcmV0c2VjcmV0c2VjcmV0c2VjcmV0
+    expirationms: 10512000000

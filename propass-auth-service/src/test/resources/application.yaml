@@ -1,0 +1,6 @@
+propass:
+  security.jwt:
+    secret: c2VjcmV0c2VjcmV0c2VjcmV0c2VjcmV0c2VjcmV0c2VjcmV0
+    expirationms: 10512000000
+  service.user.baseUrl: http://localhost:8085/
+logging.level.root: DEBUG

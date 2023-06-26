@@ -1,0 +1,3 @@
+propass:
+  security.jwt.secret: c2VjcmV0c2VjcmV0c2VjcmV0c2VjcmV0c2VjcmV0c2VjcmV0
+  service.user.baseUrl: http://localhost:8080/

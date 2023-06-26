@@ -1,0 +1,54 @@
+image: maven:3.8.5-openjdk-17
+pipelines:
+  branches:
+    master:
+      - step:
+          name: Tests
+          script:
+            - export TESTCONTAINERS_RYUK_DISABLED=true
+            - mvn clean verify -P IT
+          services:
+            - docker
+      - step:
+          name: Build
+          script:
+            - mvn clean package -Dmaven.test.skip=true
+          artifacts:
+            - propass-monolith-api/target/propass-monolith-api-0.0.1-SNAPSHOT.jar
+      - step:
+          name: Deploy to s3
+          image: atlassian/default-image:2
+          script:
+            - mkdir artifact
+            - zip -r artifact/archive.zip *
+            - pipe: atlassian/aws-s3-deploy:0.5.0
+              variables:
+                 AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+                 AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+                 AWS_DEFAULT_REGION: ${AWS_DEFAULT_REGION}
+                 COMMAND: 'upload-only'
+                 S3_BUCKET: $S3_BUCKET
+                 LOCAL_PATH: 'artifact'
+                 ACL: 'private'
+                 APPLICATION_NAME: ${APPLICATION_NAME}
+      - step:
+          name: Deploy to CodeDeploy
+          image: atlassian/default-image:2
+          script:
+            # Install AWS CLI
+            - apt-get update && apt-get install -y awscli
+            # Configure AWS CLI
+            - aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
+            - aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
+            - aws configure set default.region $AWS_DEFAULT_REGION
+            - |
+             aws deploy create-deployment \
+              --application-name $APPLICATION_NAME \
+              --deployment-config-name CodeDeployDefault.OneAtATime \
+              --deployment-group-name $DEPLOYMENT_GROUP \
+              --description "Getting my revision application from s3 and uploading it to the ec2" \
+              --file-exists-behavior OVERWRITE \
+              --s3-location bucket=$S3_BUCKET,bundleType=zip,key=archive.zip
+
+
+
