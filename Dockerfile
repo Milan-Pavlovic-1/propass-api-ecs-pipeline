@@ -1,6 +1,6 @@
 # Build stage
 #FROM maven:3.8.5-openjdk-17 AS build
-FROM 906330555725.dkr.ecr.eu-central-1.amazonaws.com/maven:3.8.5-openjdk-17
+FROM 906330555725.dkr.ecr.eu-central-1.amazonaws.com/maven:3.8.5-openjdk-17 as build
 WORKDIR /app
 
 # Copy application source code and build application dependencies
