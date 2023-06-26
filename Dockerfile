@@ -1,5 +1,6 @@
 # Build stage
-FROM maven:3.8.5-openjdk-17 AS build
+#FROM maven:3.8.5-openjdk-17 AS build
+FROM 906330555725.dkr.ecr.eu-central-1.amazonaws.com/maven:3.8.5-openjdk-17
 WORKDIR /app
 
 # Copy application source code and build application dependencies
@@ -7,7 +8,8 @@ COPY . .
 RUN mvn clean package -Dmaven.test.skip=true
 
 # Final stage
-FROM amazoncorretto:17
+#FROM amazoncorretto:17
+FROM 906330555725.dkr.ecr.eu-central-1.amazonaws.com/amazoncorretto:17
 WORKDIR /app
 
 # Copy the built JAR file from the build stage
