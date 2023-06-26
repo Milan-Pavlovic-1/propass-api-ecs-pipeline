@@ -5,11 +5,14 @@ env:
 phases:
   pre_build:
     commands:
+      #- aws ecr get-login-password --region eu-central-1 | docker login --username AWS --password-stdin 906330555725.dkr.ecr.eu-central-1.amazonaws.com
+      - echo Logging in to Amazon ECR...
       - aws ecr get-login-password --region eu-central-1 | docker login --username AWS --password-stdin 906330555725.dkr.ecr.eu-central-1.amazonaws.com
+- environment:
+    image: 906330555725.dkr.ecr.eu-central-1.amazonaws.com/alpine:latest
   build:
     commands:
-      #- docker build -t propass-api .
-      - docker build --platform linux/arm64/v8 -t propass-api .
+      - docker build -t propass-api .
       - docker tag propass-api:latest 906330555725.dkr.ecr.eu-central-1.amazonaws.com/propass-api:latest
   post_build:
     commands:
