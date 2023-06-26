@@ -59,7 +59,7 @@ GIT_COMMIT=`git rev-parse HEAD`
 NEEDS_TAG=`git describe --contains $GIT_COMMIT`
 
 docker tag propass-api:latest 906330555725.dkr.ecr.eu-central-1.amazonaws.com/propass-api:$NEW_TAG
-docker tag propass-api:latest 906330555725.dkr.ecr.eu-central-1.amazonaws.com/propass-api:$NEW_TAG
+docker push 906330555725.dkr.ecr.eu-central-1.amazonaws.com/propass-api:$NEW_TAG
 
 #only tag if no tag already (would be better if the git describe command above could have a silent option)
 if [ -z "$NEEDS_TAG" ]; then
